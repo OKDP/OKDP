@@ -74,10 +74,7 @@ The fastest way to explore OKDP. Spins up a full, pre-configured platform on [Ki
 
 Deploy components individually on your own cluster using the Helm-based install guides.
 
-1. Install infrastructure prerequisites: follow the [okdp-prerequisites guide](https://github.com/OKDP/helm-handbook/tree/main/modules/prerequisites/okdp-prerequisites) or install modules individually
-2. Install the data platform components you need
-
-> To deploy the full stack at once, see the [helm-handbook](https://github.com/OKDP/helm-handbook) main README.
+See the [helm-handbook](https://github.com/OKDP/helm-handbook) for install guides.
 
 ---
 
