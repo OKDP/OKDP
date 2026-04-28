@@ -47,7 +47,7 @@ OKDP is structured around two complementary layers:
 | Keycloak      | Identity and access management with OIDC support for all OKDP services | [codecentric/keycloakx](https://codecentric.github.io/helm-charts) |
 | SeaweedFS     | S3-compatible distributed object storage for data lake and event logs  | [seaweedfs/helm](https://seaweedfs.github.io/seaweedfs/helm)       |
 
-> For testing purpose, you can deploy all infrastructure prerequisites at once with use the [okdp-prerequisites umbrella chart](https://github.com/OKDP/helm-handbook/tree/main/modules/prerequisites/okdp-prerequisites). **Do not use it for production cluster.**
+> For testing purpose, you can deploy all infrastructure prerequisites at once with the [okdp-prerequisites umbrella chart](https://github.com/OKDP/helm-handbook/tree/main/modules/prerequisites/okdp-prerequisites). **Do not use it for production cluster.**
 
 ## 🎛️ Control Plane
 
