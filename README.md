@@ -37,16 +37,6 @@ OKDP is structured around two complementary layers:
 | JupyterHub      | Multi-user interactive notebook environment with PySpark integration, S3 file browsing, and OIDC authentication                                   | [jupyterhub](https://hub.jupyter.org/helm-chart/)                                                                                  | [jupyterlab-docker](https://github.com/OKDP/jupyterlab-docker)                                                                                                                                                                                                 |
 | OKDP Examples   | Hands-on examples, Jupyter notebooks, and data workflows showcasing the OKDP platform end-to-end                                                  | [okdp-examples](https://github.com/OKDP/okdp-examples)                                                                             | [okdp-examples](https://github.com/OKDP/okdp-examples)                                                                                                                                                                                                         |
 
-## ⚙️ Infrastructure Prerequisites
-
-| Component     | Description                                                            | Helm Chart                                                         |
-| ------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| cert-manager  | Kubernetes-native TLS certificate management (CNCF Graduated)          | [jetstack/cert-manager](https://charts.jetstack.io)                |
-| ingress-nginx | NGINX Ingress Controller for HTTP/HTTPS routing                        | [ingress-nginx](https://kubernetes.github.io/ingress-nginx)        |
-| CloudNativePG | PostgreSQL operator for automated cluster management (CNCF Sandbox)    | [cnpg/cloudnative-pg](https://cloudnative-pg.github.io/charts)     |
-| Keycloak      | Identity and access management with OIDC support for all OKDP services | [codecentric/keycloakx](https://codecentric.github.io/helm-charts) |
-| SeaweedFS     | S3-compatible distributed object storage for data lake and event logs  | [seaweedfs/helm](https://seaweedfs.github.io/seaweedfs/helm)       |
-
 > For testing purpose, you can deploy all infrastructure prerequisites at once with the [okdp-prerequisites umbrella chart](https://github.com/OKDP/helm-handbook/tree/main/modules/prerequisites/okdp-prerequisites). **Do not use it for production cluster.**
 
 ## 🎛️ Control Plane
