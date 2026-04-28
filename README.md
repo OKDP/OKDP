@@ -106,4 +106,4 @@ See [GOVERNANCE.md](GOVERNANCE.md) for project governance, roles, and decision-m
 
 ## 📄 License
 
-[Apache License 2.0](./LICENSE)
+[Apache License 2.0](LICENSE)
