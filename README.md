@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/OKDP/OKDP/main/logo/main/okdp-main.png" alt="OKDP Logo" width="320" />
+<img src="https://raw.githubusercontent.com/OKDP/OKDP/main/logo/inverted/okdp-inverted.png" alt="OKDP Logo" width="320" />
 
 # OKDP: Open Kubernetes Data Platform
 
