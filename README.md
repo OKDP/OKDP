@@ -73,7 +73,6 @@ See the [helm-handbook](https://github.com/OKDP/helm-handbook) for install guide
 OKDP is supported by [TOSIT](https://tosit.fr) (The Open Source I Trust), initiated by DGFiP, Orange, and other organizations. The goal is a sovereign, powerful, and fully open-source data stack accessible to everyone.
 
 - 🌐 **Website**: [okdp.io](https://okdp.io)
-- 💬 **Discussions**: [Mattermost OKDP (TOSIT)](https://framateam.org/tosit/channels/okdp)
 - 📅 **Weekly technical meeting**: Every Wednesday at 10:00 CET
 - 🐳 **Docker images**: [Quay.io/okdp](https://quay.io/organization/okdp)
 - ☕ **Java artifacts**: [Maven Central (io.okdp)](https://central.sonatype.com/namespace/io.okdp)
