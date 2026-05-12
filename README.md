@@ -16,6 +16,7 @@ Modular, sovereign, and community-driven.
 
 ---
 
+<a id="architecture"></a>
 ## 🏗️ Architecture
 
 OKDP is structured around two complementary layers:
@@ -52,6 +53,7 @@ The OKDP Control Plane provides a unified interface to deploy, configure, and mo
 
 ---
 
+<a id="getting-started"></a>
 ## 🚀 Getting Started
 
 ### Option 1: Sandbox (recommended)
@@ -68,6 +70,7 @@ See the [helm-handbook](https://github.com/OKDP/helm-handbook) for install guide
 
 ---
 
+<a id="community"></a>
 ## 🤝 Community & TOSIT
 
 OKDP is supported by [TOSIT](https://tosit.fr) (The Open Source I Trust), initiated by DGFiP, Orange, and other organizations. The goal is a sovereign, powerful, and fully open-source data stack accessible to everyone.
