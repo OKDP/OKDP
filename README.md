@@ -89,7 +89,7 @@ See the [official roadmap](https://okdp.io/roadmap/) on okdp.io (v1.0.0 planned 
 <!-- 
 TODO: Replace below CONTRIBUTING.md feature branch reference to main branch once PR merged
 -->
-See [CONTRIBUTING.md](https://github.com/jpmewenemesse/.github/blob/1767ffb1b49f37c23d6cb1d97984d910d3b1fcab/CONTRIBUTING.md) for documentation standards and review process.
+<!-- See [CONTRIBUTING.md](https://github.com/OKDP/.github/blob/main/CONTRIBUTING.md) for documentation standards and review process.-->
 
 <!-- 
 TODO: Add below once GOVERNANCE.md is merged
