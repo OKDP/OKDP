@@ -83,7 +83,7 @@ OKDP is supported by [TOSIT](https://tosit.fr) (The Open Source I Trust), initia
 
 ## 🗺️ Roadmap
 
-See the [official roadmap](https://okdp.io/roadmap/) on okdp.io (v1.0.0 planned for June 2026).
+See the official roadmap on [okdp.io](https://okdp.io/roadmap/).
 
 ## 🤲 Contributing
 <!-- 
