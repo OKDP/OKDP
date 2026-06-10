@@ -1,52 +1,46 @@
-# OKDP README Template: Documentation Audit Canvas
+# Repository README Guidelines and Template
 
 > **Purpose:** This document is a common canvas for auditing and improving documentation across all OKDP repositories.
+> It was agreed upon during a team workshop (June 2026) and lives in [OKDP/OKDP](https://github.com/OKDP/OKDP) as the reference.
 >
 > **How to use it:**
-> - Use the [Section Reference Table](#section-reference-table) to audit an existing README.
+> - Use the [Instructions](#instructions) to audit an existing README.
 > - Use the [Full Template](#full-template) as a starting point when writing or rewriting a README.
 > - Remove all annotation comments (`<!-- ... -->`) before publishing.
 > - Sections marked **[CONDITIONAL]** apply only to specific repo types. Sections marked **[OPTIONAL]** apply to all repo types but are not required.
 
 ---
 
-## Section Reference Table
+## Instructions
 
-| # | Section | Required? | Repo type | What to audit / check |
-|---|---------|:---------:|-----------|------------------------|
-| 0 | Visual header (screenshot or OKDP banner) | Conditional | All | Does the component expose a web interface? If yes: is there a screenshot stored in `docs/assets/`? If not: is the section omitted or replaced with an OKDP-branded banner? **Never use upstream project logos** (trademark restrictions). |
-| 1 | Badges | **Mandatory** | All | Are the minimum required badges present and links working? Minimum set: CI status, latest release, Apache 2.0 license. Add extras only if relevant (e.g. upstream version, package registry). Use [shields.io](https://shields.io) to generate custom badges. |
-| 2 | Project name + one-line description | **Mandatory** | All | Clear to someone unfamiliar with the tool? |
-| 3 | What does this project provide? | **Mandatory** | All | Are **both motivation levels** addressed? (1) Upstream gap: what does the upstream not provide that justifies this packaging? (2) Platform role: why did OKDP choose to include this component? what role does it play in the platform and what depends on it? Are delivered artifacts listed (image/chart/SDK)? Are OKDP-specific additions highlighted? |
-| — | Alternatives (sub-section) | Optional | All | Are competing/upstream tools mentioned? |
-| 4 | Architecture diagram | **Mandatory** | Helm, Image+Chart, Sandbox | Is a diagram present? Format: Mermaid, draw.io SVG, or Excalidraw SVG? Does it reflect the **OKDP deployment scenario** (not just upstream)? Is there a note explaining OKDP-specific choices and clarifying that other options exist? Is there a link to the upstream architecture docs? |
-| 5 | Prerequisites | **Mandatory** | All | Are versions, tools, credentials all listed explicitly? Is there a **"Tested with"** subsection showing exact validated versions (not just ranges)? |
-| 6 | Quick start | Conditional | Helm, Image+Chart, Sandbox | Is it the shortest path to a meaningful first result? Is an expected result shown? |
-| 7 | Installation (full, step-by-step) | **Mandatory** | All | Every step has a command + expected result? |
-| 8 | Configuration | Conditional | Helm, Image+Chart, SDK | Is there a parameter table? For Helm repos: is it separated from auto-generated chart values? |
-| 9 | Usage examples | Conditional | SDK, Examples | Are examples realistic? Do they show expected output? |
-| 10 | Images / Components | Conditional | Image, Image+Chart | Tag format documented? `quay.io/okdp` link present? |
-| 11 | OKDP Integration | **Mandatory** | All | Is the component's integration in the OKDP ecosystem briefly mentioned? |
-| 12 | Troubleshooting | **Mandatory** | Helm, Image+Chart, Sandbox | Are the most common errors documented with symptom → cause → fix? |
-| 13 | Contributing / Development | Optional | All | Dev setup, build, and test... each with expected result? Points to CONTRIBUTING.md? |
-| 14 | Uninstall / Teardown | **Mandatory** | Helm, Image+Chart, Sandbox | Is there a clean uninstall procedure covering all deployed resources and the namespace if applicable? Is an expected result shown for each step? |
-| 15 | Contributing & License | **Mandatory** | All | CONTRIBUTING.md link present? License is Apache 2.0? |
-| 16 | "Built for OKDP Community" footer | **Mandatory** | All | Footer + OKDP logo SVG present? |
+| Section | Required? | Repo type | What to audit / check |
+|---------|:---------:|-----------|------------------------|
+| Visual header (screenshot or OKDP banner) | Conditional | All | Does the component expose a web interface? If yes: is there a screenshot stored in `docs/assets/`? If not: is the section omitted or replaced with an OKDP-branded banner? **Never use upstream project logos** (trademark restrictions). |
+| Badges | **Mandatory** | All | Are the minimum required badges present and links working? Minimum set: CI status, latest release, Apache 2.0 license. A common list of possible additional badges includes: upstream version badge (when wrapping a versioned upstream tool), Artifact Hub badge (Helm chart repos only), quay.io / Docker image badge (Image and Image+Chart repos only). Use [shields.io](https://shields.io) to generate custom badges. |
+| Project name + one-line description | **Mandatory** | All | Clear to someone unfamiliar with the tool? |
+| What does this project provide? | **Mandatory** | All | Are **both motivation levels** addressed? (1) Upstream gap: what does the upstream not provide that justifies this packaging? (2) Platform role: why did OKDP choose to include this component — what role does it play in the platform and what depends on it? Are delivered artifacts listed (image/chart/SDK)? Are OKDP-specific additions highlighted? |
+| Architecture diagram | **Mandatory** | Helm, Image+Chart, Sandbox | Is a diagram present? Format: Mermaid, draw.io SVG, or Excalidraw SVG? Are diagrams provided in both SVG and PNG formats? Is the source file (e.g. `.penpot`, `.drawio`) committed alongside the exports? Is the editor open source? Does it reflect the **OKDP deployment scenario** (not just upstream)? Is there a note explaining OKDP-specific choices and clarifying that other options exist? Is there a link to the upstream architecture docs? |
+| Requirements | **Mandatory** | All | Are versions, tools, credentials all listed explicitly? Is there a **"Tested with"** subsection showing exact validated versions (not just ranges)? |
+| Quick start | Conditional | Helm, Image+Chart, Sandbox | Is it the shortest path to a meaningful first result? Is an expected result shown? |
+| Installation (full, step-by-step) | **Mandatory** | All | Every step has a command + expected result? |
+| Configuration | Conditional | Helm, Image+Chart, SDK | Is there a parameter table? For Helm repos: is it separated from auto-generated chart values? |
+| Usage examples | Conditional | SDK, Examples | Are examples realistic? Do they show expected output? |
+| Images / Components | Conditional | Image, Image+Chart | Tag format documented? `quay.io/okdp` link present? |
+| OKDP Integration | **Mandatory** | All | Is the component's integration in the OKDP ecosystem briefly mentioned? |
+| Troubleshooting | **Mandatory** | Helm, Image+Chart, Sandbox | Are the most common errors documented with symptom → cause → fix? |
+| Contributing / Development | Optional | All | Dev setup, build, and test — each with expected result? Points to CONTRIBUTING.md? |
+| Uninstall / Teardown | **Mandatory** | Helm, Image+Chart, Sandbox | Is there a clean uninstall procedure covering all deployed resources and the namespace if applicable? Is an expected result shown for each step? |
+| Alternatives | Optional | All | Are competing/upstream tools mentioned? |
+| Contributing & License | **Mandatory** | All | CONTRIBUTING.md link present? License is Apache 2.0? |
+| "Built for OKDP Community" footer | **Mandatory** | All | Footer + OKDP logo SVG present? |
 
 ---
 
 ## Full Template
 
 ```markdown
-<!--
-  OKDP README Template
-  Remove all annotation comments before publishing.
-  Sections marked [CONDITIONAL] can be omitted if not applicable to the repo type.
-  Sections marked [OPTIONAL] can be omitted entirely regardless of repo type.
--->
-
 <!-- ═══════════════════════════════════════════════════════════
-     SECTION 0: Visual Header [CONDITIONAL]
+     SECTION 0 — Visual Header [CONDITIONAL]
      Only if the component exposes a web interface (Superset, JupyterHub, Airflow, …).
      Use a screenshot of the running application, stored in docs/assets/.
 
@@ -59,7 +53,7 @@
        - Or use the OKDP-branded text banner (Option B below).
      ═══════════════════════════════════════════════════════════ -->
 
-<!-- Option A (repos WITH a web interface): screenshot -> DELETE this block if using Option B -->
+<!-- Option A (repos WITH a web interface): screenshot — DELETE this block if using Option B -->
 <p align="center">
   <img src="docs/assets/screenshot.png" alt="[Project Name] — screenshot" width="700"/>
 </p>
@@ -67,7 +61,7 @@
 <!-- Option B (repos WITHOUT a web interface): OKDP-branded text banner
      To use: delete Option A above and uncomment this block.
 <p align="center">
-  <strong>OKDP: [Project Name]</strong><br/>
+  <strong>OKDP — [Project Name]</strong><br/>
   <em>[One-line description]</em>
 </p>
 -->
@@ -75,11 +69,12 @@
 ---
 
 <!-- ═══════════════════════════════════════════════════════════
-     SECTION 1: Badges
+     SECTION 1 — Badges
      Minimum required: CI status, latest release, Apache 2.0 license.
-     Add extras only if they provide relevant information:
-       - Upstream version badge (if wrapping a versioned upstream tool)
-       - Package registry badge (PyPI, npm, quay.io…)
+     A common list of possible additional badges includes:
+       - Upstream version badge (when wrapping a versioned upstream tool)
+       - Artifact Hub badge (Helm chart repos only)
+       - quay.io / Docker image badge (Image and Image+Chart repos only)
      Use https://shields.io to generate custom badges.
      ═══════════════════════════════════════════════════════════ -->
 [![CI](https://github.com/OKDP/<repo>/actions/workflows/ci.yml/badge.svg)](https://github.com/OKDP/<repo>/actions/workflows/ci.yml)
@@ -89,7 +84,7 @@
 ---
 
 <!-- ═══════════════════════════════════════════════════════════
-     SECTION 2: Project Name + Short Description
+     SECTION 2 — Project Name + Short Description
      One or two sentences: what is it, what problem does it solve,
      who is it for. No jargon without explanation.
      ═══════════════════════════════════════════════════════════ -->
@@ -97,13 +92,13 @@
 
 > Short description: what is it, what problem does it solve, who is it for.
 >
-> Example: *"OKDP-flavored Helm chart and Docker image for Apache Superset,
+> Example: *"OKDP-flavored Helm chart and Docker image for Apache Superset —
 > adds OIDC/OAuth2 and externalized secrets on top of the official chart."*
 
 ---
 
 <!-- ═══════════════════════════════════════════════════════════
-     SECTION 3: What does this project provide?
+     SECTION 3 — What does this project provide?
      Start with WHY: what gap does the upstream not cover?
      Then list the delivered artifacts and what OKDP adds.
      ═══════════════════════════════════════════════════════════ -->
@@ -113,17 +108,17 @@
 
 <!-- Two questions must be answered here:
 
-     1. REPO JUSTIFICATION: What does the upstream project not provide
+     1. REPO JUSTIFICATION — What does the upstream project not provide
         that makes this packaging necessary?
         Example: "Apache Hive provides the Metastore binary but no maintained
         Kubernetes packaging. This repository adds the Dockerfile and Helm chart
         needed to run it on Kubernetes."
 
-     2. PLATFORM JUSTIFICATION: What specific OKDP need does this fulfill?
+     2. PLATFORM JUSTIFICATION — What specific OKDP need does this fulfill?
         What role does it play in the platform and what depends on it?
         Example: "OKDP delivers a lakehouse on Kubernetes where data lives in
-        SeaweedFS (S3-compatible object storage). Trino, the interactive SQL
-        query engine in OKDP, uses the Hive connector (connector.name=hive)
+        SeaweedFS (S3-compatible object storage). Trino — the interactive SQL
+        query engine in OKDP — uses the Hive connector (connector.name=hive)
         which requires a running Hive Metastore to resolve table definitions and
         partition locations. Hive Metastore is therefore the mandatory data catalog
         layer that makes the lakehouse queryable through Trino. PostgreSQL, already
@@ -140,29 +135,25 @@ This repository fills that gap by delivering:
 ### Delivered artifacts
 
 <!-- Keep only the artifact types this repo delivers, delete the rest -->
-- **Docker image** `quay.io/okdp/<image>`, built on top of `<upstream>` with:
+- **Docker image** `quay.io/okdp/<image>` — built on top of `<upstream>` with:
   - OKDP addition 1
   - OKDP addition 2
-- **Helm chart**, wraps `<upstream-chart>` and adds:
+- **Helm chart** — wraps `<upstream-chart>` and adds:
   - OKDP-specific configuration A
   - OKDP-specific configuration B
-
-<!-- [OPTIONAL] Alternatives sub-section -->
-### Alternatives
-
-| Alternative | Notes |
-|-------------|-------|
-| [Upstream official image](https://...) | No OKDP-specific extensions |
-| [Another tool](https://...) | Different trade-offs: ... |
 
 ---
 
 <!-- ═══════════════════════════════════════════════════════════
-     SECTION 4: Architecture [MANDATORY for Helm, Image+Chart, Sandbox]
+     SECTION 4 — Architecture [MANDATORY for Helm, Image+Chart, Sandbox]
      Include a diagram. Preferred formats:
      - Mermaid (renders natively in GitHub — recommended)
-     - draw.io SVG (commit the .svg, store in docs/assets/)
-     - Excalidraw SVG
+     - draw.io, Penpot, or Excalidraw
+
+     Diagrams must be provided in both SVG and PNG formats (GitHub does not
+     support embedded SVG in all contexts). The source file (e.g. `.penpot`
+     for Penpot, `.drawio` for draw.io) must be committed alongside the exports.
+     The editor must be open source. Store all assets in docs/assets/.
 
      Not required for: SDK, Image-only, Examples repos.
 
@@ -176,7 +167,7 @@ This repository fills that gap by delivering:
 ## Architecture
 
 > **OKDP deployment context:** This diagram reflects how [Project Name] is deployed within OKDP.
-> [Dependency X] (e.g. PostgreSQL) was chosen because [reason, e.g. it is already provisioned by the CloudNativePG operator in the OKDP sandbox].
+> [Dependency X] (e.g. PostgreSQL) was chosen because [reason — e.g. it is already provisioned by the CloudNativePG operator in the OKDP sandbox].
 > Other options (e.g. MySQL) are supported by the upstream project and may also work — this is not an OKDP restriction.
 > See the [upstream architecture documentation](https://link-to-upstream-docs) for the full picture.
 
@@ -197,19 +188,19 @@ graph TD
 ---
 
 <!-- ═══════════════════════════════════════════════════════════
-     SECTION 5: Prerequisites
+     SECTION 5 — Requirements
      Be explicit. Do NOT assume the reader knows what is implicit.
      List: tool versions, Kubernetes version, credentials, access rights.
 
      Two sub-tables are required:
-     1. Supported versions (ranges), what the project claims to support.
-     2. Tested with, exact versions validated by maintainers.
+     1. Supported versions (ranges) — what the project claims to support.
+     2. Tested with — exact versions validated by maintainers.
         This avoids the situation where a user installs a version within
         the supported range that has never actually been tested.
      ═══════════════════════════════════════════════════════════ -->
-## Prerequisites
+## Requirements
 
-<!-- List only the prerequisites that apply to this repo, delete rows that don't apply -->
+<!-- List only the requirements that apply to this repo, delete rows that don't apply -->
 | Requirement | Supported versions | Notes |
 |-------------|-------------------|-------|
 | Kubernetes | 1.19+ | |
@@ -237,7 +228,7 @@ The following versions have been validated by the maintainers. Other versions wi
 ---
 
 <!-- ═══════════════════════════════════════════════════════════
-     SECTION 6: Quick Start [CONDITIONAL]
+     SECTION 6 — Quick Start [CONDITIONAL]
      Applies to: Helm charts, Image+Chart, Sandbox repos.
      Goal: the shortest path to a meaningful first result.
      The number of steps depends on the repo — keep it as short as honest.
@@ -265,7 +256,7 @@ REVISION: 1
 ---
 
 <!-- ═══════════════════════════════════════════════════════════
-     SECTION 7: Installation (full)
+     SECTION 7 — Installation (full)
      Step-by-step. Every step must have:
      1. A command block
      2. An expected result block
@@ -273,7 +264,7 @@ REVISION: 1
      ═══════════════════════════════════════════════════════════ -->
 ## Installation
 
-### Step 1 ...
+### Step 1 — ...
 
 ```sh
 command here
@@ -284,7 +275,7 @@ command here
 output here
 ```
 
-### Step 2 ...
+### Step 2 — ...
 
 ```sh
 command here
@@ -298,7 +289,7 @@ output here
 ---
 
 <!-- ═══════════════════════════════════════════════════════════
-     SECTION 8: Configuration [CONDITIONAL]
+     SECTION 8 — Configuration [CONDITIONAL]
      Applies to: Helm charts, Image+Chart, SDK repos.
      IMPORTANT: Cover only parameters the USER sets manually.
      Do NOT copy-paste auto-generated Helm values here
@@ -320,7 +311,7 @@ output here
 ---
 
 <!-- ═══════════════════════════════════════════════════════════
-     SECTION 9: Usage Examples [CONDITIONAL]
+     SECTION 9 — Usage Examples [CONDITIONAL]
      Applies to: SDK, API, Examples repos.
      Show realistic, runnable use cases with expected output.
      ═══════════════════════════════════════════════════════════ -->
@@ -344,7 +335,7 @@ Status: RUNNING
 ---
 
 <!-- ═══════════════════════════════════════════════════════════
-     SECTION 10: Images / Components [CONDITIONAL]
+     SECTION 10 — Images / Components [CONDITIONAL]
      Applies to: Image-only and Image+Chart repos.
      Title:
      - "Images" if this repo only produces Docker images
@@ -363,7 +354,7 @@ Images are published to [`quay.io/okdp`](https://quay.io/organization/okdp).
 ---
 
 <!-- ═══════════════════════════════════════════════════════════
-     SECTION 11: OKDP Integration
+     SECTION 11 — OKDP Integration
      Mandatory for all repos.
      Explain how this component fits into the broader OKDP platform:
      what other components depend on it, what it depends on, and
@@ -378,7 +369,7 @@ This component is part of the [OKDP Data Platform](https://okdp.io) — a cloud-
 ---
 
 <!-- ═══════════════════════════════════════════════════════════
-     SECTION 12: Troubleshooting [MANDATORY for Helm, Image+Chart, Sandbox]
+     SECTION 12 — Troubleshooting [MANDATORY for Helm, Image+Chart, Sandbox]
      Document the most common errors a new user will encounter.
      Format: symptom → likely cause → fix command + expected result.
      Replace the examples below with your repo's actual common errors.
@@ -418,7 +409,7 @@ kubectl delete pod test -n <namespace>
 ---
 
 <!-- ═══════════════════════════════════════════════════════════
-     SECTION 13: Contributing / Development [OPTIONAL]
+     SECTION 13 — Contributing / Development [OPTIONAL]
      Include only if the repo accepts external contributions
      or if the build/test process is non-trivial.
      Each sub-section must include an expected result.
@@ -466,7 +457,7 @@ All tests passed. (X tests, 0 failures)
 ---
 
 <!-- ═══════════════════════════════════════════════════════════
-     SECTION 14: Uninstall / Teardown [MANDATORY for Helm, Image+Chart, Sandbox]
+     SECTION 14 — Uninstall / Teardown [MANDATORY for Helm, Image+Chart, Sandbox]
      Provide a complete teardown procedure.
      Include all steps to remove all deployed resources, including
      the namespace if it was created solely for this installation.
@@ -502,7 +493,21 @@ namespace "<namespace>" deleted
 ---
 
 <!-- ═══════════════════════════════════════════════════════════
-     SECTION 15: Contributing & License
+     SECTION 15 — Alternatives [OPTIONAL]
+     Placed here so the reader already understands what the project
+     does before comparing it to alternatives.
+     ═══════════════════════════════════════════════════════════ -->
+## Alternatives
+
+| Alternative | Notes |
+|-------------|-------|
+| [Upstream official image](https://...) | No OKDP-specific extensions |
+| [Another tool](https://...) | Different trade-offs: ... |
+
+---
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 16 — Contributing & License
      Mandatory. Always link to the central CONTRIBUTING.md.
      ═══════════════════════════════════════════════════════════ -->
 ## Contributing & License
@@ -514,10 +519,10 @@ This project is licensed under the [Apache License 2.0](LICENSE).
 ---
 
 <!-- ═══════════════════════════════════════════════════════════
-     SECTION 16: Footer
+     SECTION 17 — Footer
      MANDATORY. Do not remove or modify.
      ═══════════════════════════════════════════════════════════ -->
 
-**Built 🚀 for the OKDP Community**
+**Built for the OKDP Community**
 <a href="https://okdp.io"><img src="https://okdp.io/logos/okdp-notext.svg" height="20px"/></a>
 ```
