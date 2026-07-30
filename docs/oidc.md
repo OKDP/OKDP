@@ -49,7 +49,7 @@ This document describes the process of dynamically registering a new component t
 
 | New component | Flux (1) | Deployment Pipeline | Flux (2) | IdProvider |
 | :--- | :---: | :---: | :---: | :--- |
-| | | **1.** `POST /clients-registrations/openid-connect`<br>*(client_name, redirect_uris, scope...)* | **->** | |
+| | | **1.** `POST /clients-registrations/openid-connect`<br>*(client_name, redirect_uris, scope...)* | -> | |
 | | | | <- | **2.** `201 Created`<br>*(client_id, client_secret, registration_access_token)* |
 | | <- | **3.** OIDC Credentials Injection<br>*(client_id / client_secret)* | | |
 | **4.** SSO Authentication<br>*(Authorization Code / etc.)* | -> | -> | -> | |
@@ -58,7 +58,7 @@ This document describes the process of dynamically registering a new component t
 1. **OIDC Registration Request:** The deployment pipeline dynamically registers the client with IdProvider by sending its metadata (`client_name`, `redirect_uris`, `scope`, etc.).
 2. **Return of credentials:** Keycloak validates the registration and returns a `201 Created` status along with the `client_id`, `client_secret`, and `registration_access_token`.
 3. **Configuration injection:** The pipeline injects the generated credentials (`client_id` and `client_secret`) into the new component.
-4. **SSO Authentication:** The new component is operational and can initiate SSO authentication flows (e.g., *Authorization Code Flow*) directly with Keycloak.
+4. **SSO Authentication:** The new component is operational and can initiate SSO authentication flows (e.g., *Authorization Code Flow*) directly with the IdProvider.
  
 ### Client Registration Request
  
