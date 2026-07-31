@@ -1,10 +1,6 @@
 # OpenID Connect
- 
-## Introduction
 
-OKDP is based on an architecture in which application components can be added dynamically, without manual intervention on the infrastructure. Each component requiring authentication must have an OpenID Connect client registered with the IdProvider.
-
-Since manually creating clients in the IdProvider is not compatible with this dynamic component-adding process, it is necessary to **automate the creation of OIDC clients** when each new component is deployed. This is the role of the OIDC DCR protocol.
+OKDP uses OIDC for authentication across all the platform components. By delegating identity verification to an external Identity Provider, OKDP provides a unified Single Sign-On experience for its users.
  
 ## OIDC - OpenID Connect
  
@@ -29,10 +25,14 @@ The IdProvider acts as the project’s central authentication hub. Each applicat
 For a component to utilize this SSO mechanism, it must exist on the IdProvider side as a **client**.
  
 ## Dynamic Client Registration
+
+OKDP is based on an architecture in which application components can be added dynamically, without manual intervention on the infrastructure. Each component requiring authentication must have an OpenID Connect client registered with the IdProvider.
  
 Project components are not known in advance and can be added dynamically. It is not viable to create each OIDC client manually in the IdProvider administration console.
  
 It is necessary for **each component to be able to register automatically** within the IdProvider during deployment, without human intervention. 
+
+Since manually creating clients in the IdProvider is not compatible with this dynamic component-adding process, it is necessary to **automate the creation of OIDC clients** when each new component is deployed.
 
 ## DCR Protocol
 
