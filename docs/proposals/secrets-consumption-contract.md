@@ -235,7 +235,10 @@ The order matters only where stated. Each step is its own issue or PR, linked fr
 
 ## 8. Verification
 
-Run in the sandbox, with two backends: the local stand-in, and the optional Vault release.
+Run in the sandbox. Two checks are kept apart: isolation is proven with the local stand-in,
+and backend independence with the OpenBao package of `community-packages`.
+
+With the local stand-in (section 5.4):
 
 - No Secret is replicated to all namespaces: no `replicate-to: "*"` annotation is left, and each
   Secret read by a workload exists only in the namespaces that consume it. The backing namespaces
@@ -245,14 +248,20 @@ Run in the sandbox, with two backends: the local stand-in, and the optional Vaul
   Kubernetes side (`kubectl auth can-i get secrets -n okdp-secrets-b --as
   system:serviceaccount:a:<sa>` answers `no`) and on the backend side (an `ExternalSecret` in A
   pointing at a path of B fails to sync).
-- Once the same values exist in Vault, a project moves from the local stand-in to Vault by
-  changing the platform configuration only. No package and no Release parameter changes. Copying
-  the values is a migration step, not part of the test.
 - `immutable`: redeploying the Release and re-creating the `ExternalSecret` leave the value
   unchanged.
 - `rotatable`: a value changed in the backend reaches the Secret within the refresh interval, and
   the consumer picks it up as its package documents.
 - No secret value remains in the parameters of a consuming Release.
+
+With OpenBao:
+
+- The OpenBao package runs in dev mode, with no per-project policy. It proves only that the
+  backend can be switched, not isolation (section 4.6). A backend that serves several projects
+  must pass the same negative test.
+- Once the same values exist in OpenBao, one project moves from the local stand-in to OpenBao by
+  changing the platform configuration only. No package and no Release parameter changes. Copying
+  the values is a migration step, not part of the test.
 
 ## 9. Open questions
 
