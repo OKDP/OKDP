@@ -157,10 +157,8 @@ On backends that support paths, values are stored under `okdp/<namespace>/<servi
 Each segment is a DNS label (`[a-z0-9-]`). The project is the namespace, so platform services
 follow the same rule.
 
-The sandbox stand-in becomes a backend like the others: values are stored in a backing namespace
-per project (`okdp-secrets-<project>`), read through the ESO `kubernetes` provider, with a Role
-limited to that namespace. The Secret name there is `<service>.<name>`. Segments contain no dot,
-so the mapping is unambiguous.
+The sandbox stand-in becomes a backend read through the ESO `kubernetes` provider. It stores all
+values in a single namespace and gives no isolation between projects.
 
 ### 5.5 Generated secrets
 
@@ -215,16 +213,12 @@ The order matters only where stated. Each step is its own issue or PR, linked fr
    The flag is deprecated and may disappear in a later chart, so this bridge stays short.
 2. The `database-server` and `s3` contracts declare their keys explicitly. The form depends on
    what the schema language supports (open question 2).
-3. `local-secrets-provider` stops replicating to `*` and delivers each Secret to the namespaces
-   that consume it. Then it becomes a backend read through ESO (section 5.4). Once no Secret
-   carries the mittwald annotations, the replicator and the secret-generator can leave `tools`.
-4. The optional storage credentials are delivered to listed project namespaces instead of `*`.
-5. Keycloak reads its admin password, user passwords and client secrets from Secrets.
-6. The server takes the store from the platform configuration and accepts providers other than
+3. `local-secrets-provider` becomes a backend read through ESO (section 5.4).
+4. The server takes the store from the platform configuration and accepts providers other than
    Vault. The console form follows.
-7. Each package in `platform-packages` and `community-packages` is checked against section 4,
+5. Each package in `platform-packages` and `community-packages` is checked against section 4,
    one PR per package when a change is needed.
-8. Validation in the sandbox (section 8).
+6. Validation in the sandbox (section 8).
 
 ## 7. Out of scope
 
@@ -232,36 +226,31 @@ The order matters only where stated. Each step is its own issue or PR, linked fr
 - Dynamic secrets, PKI, rotation driven by the backend.
 - Delivering secrets as files mounted from the backend.
 - The console's secret management features beyond removing the Vault-only assumption.
+- An implementation that enforces rules 4.3, 4.4 and 4.6. This proposal states them, it does not
+  deliver one.
 
 ## 8. Verification
 
-Run in the sandbox. Two checks are kept apart: isolation is proven with the local stand-in,
-and backend independence with the OpenBao package of `community-packages`.
+Contract checks, for any implementation that serves several projects:
 
-With the local stand-in (section 5.4):
-
-- No Secret is replicated to all namespaces: no `replicate-to: "*"` annotation is left, and each
-  Secret read by a workload exists only in the namespaces that consume it. The backing namespaces
-  of the local stand-in hold the source values, and only the identities of their project can read
-  them.
 - Negative test: project A's store identity cannot read project B's secrets. Checked on the
-  Kubernetes side (`kubectl auth can-i get secrets -n okdp-secrets-b --as
-  system:serviceaccount:a:<sa>` answers `no`) and on the backend side (an `ExternalSecret` in A
-  pointing at a path of B fails to sync).
+  Kubernetes side (`kubectl auth can-i get secrets -n b --as system:serviceaccount:a:<sa>`
+  answers `no`) and on the backend side (an `ExternalSecret` in A pointing at a path of B fails
+  to sync).
 - `immutable`: redeploying the Release and re-creating the `ExternalSecret` leave the value
   unchanged.
 - `rotatable`: a value changed in the backend reaches the Secret within the refresh interval, and
   the consumer picks it up as its package documents.
 - No secret value remains in the parameters of a consuming Release.
 
-With OpenBao:
+In the sandbox, with the local stand-in (section 5.4) and the OpenBao package of
+`community-packages` in dev mode:
 
-- The OpenBao package runs in dev mode, with no per-project policy. It proves only that the
-  backend can be switched, not isolation (section 4.6). A backend that serves several projects
-  must pass the same negative test.
 - Once the same values exist in OpenBao, one project moves from the local stand-in to OpenBao by
   changing the platform configuration only. No package and no Release parameter changes. Copying
   the values is a migration step, not part of the test.
+- Neither the local stand-in nor OpenBao in dev mode gives isolation between projects. They are
+  not expected to pass the negative test.
 
 ## 9. Open questions
 
@@ -281,5 +270,3 @@ For the reference implementation:
    Should they go to the project's backend instead?
 4. **Who creates the per-project store** when a project is created: the platform's GitOps
    configuration, or the Control Plane.
-5. **Local stand-in layout.** One backing namespace per project (section 5.4), or a single
-   namespace with RBAC per Secret.
