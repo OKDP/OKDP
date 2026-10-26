@@ -15,8 +15,7 @@ them, whatever deploys the server and whatever engine applies the instance.
   implements provisioning.
 - **One consumer, one database.** Each consumer gets its own database, its own role and its own
   credentials, never those of the server.
-- **Data outlives the consumer.** Removing a consumer never deletes its data. Deleting data is a
-  separate, explicit action (P6.6).
+- **Data outlives the consumer.** Removing a consumer never deletes its data (P6.6).
 - **The server is a choice of the installation, not of the package.** The same package runs on a
   server shared by the project, on a dedicated server, or on a database declared by hand.
 - **Independent of the database engine.** The contract names no database engine except in the
@@ -31,9 +30,8 @@ them, whatever deploys the server and whatever engine applies the instance.
 | Database engine | The database software: `postgresql` or `mariadb`. Adding one is a change of this contract |
 | Server | An instance providing a server capability (3.5) |
 | Project server | A server of a project |
+| Dedicated server | A project server used by a single consumer. It is a use, not a type |
 | Platform server | The server of the platform services; never used by a project |
-| Sharing | Setting of a project server: `shared` (any number of consumers) or `exclusive` (one consumer) |
-| Dedicated server | A project server whose sharing is `exclusive` |
 | Consumer | An instance consuming a `database-server` connection |
 | Database binding | How the instance declaration satisfies one consumed `database-server` connection: **existing** (a connection named by reference) or **provisioned** (a database created on a server for this binding) |
 | Provisioned database | The database, role, credentials Secret and connection created for one provisioned binding |
@@ -70,18 +68,15 @@ connections:
 - The database name, the role and the schemas are not requirements: the platform names the first
   two, and the consumer owns its database, so it creates its own schemas.
 
-### 3.2 Binding and sharing (instance declaration)
+### 3.2 Binding (instance declaration)
 
-The instance declaration gains two fields.
-
-**`databases`**, on a consumer: for each consumed `database-server` connection to provision, the
-server that hosts it.
+The instance declaration gains `databases`: for each consumed `database-server` connection to
+provision, the server that hosts it.
 
 ```yaml
 databases:
   db:
     server: postgresql          # a server instance of the same project
-    adopt: false                # default; true: adopt a kept database (D5.2)
 ```
 
 - A consumed connection listed in `databases` is **provisioned**. The engine sets the parameter
@@ -91,19 +86,14 @@ databases:
   other contract.
 - An optional connection MAY be provisioned. Left empty and not listed, it binds nothing (P5.4).
 
-**`sharing`**, on a project server: `shared` (default) or `exclusive`.
-
 ### 3.3 Provisioned database
 
 | Element | Value |
 |---|---|
 | Database | owned by the role; name derived from the namespace, the instance and the connection name, stable and unique on the server; a name longer than the database engine allows is truncated and ends with a stable hash of the full name |
 | Role | login role owning the database, nothing else (D3.1) |
-| Origin | project, consumer instance, package name and connection name, recorded with the database on the server |
-| Secret | in the namespace of the consumer (D3.3) |
+| Secret | in the namespace of the consumer (D3.2) |
 | Connection | `database-server`, in the namespace of the consumer, named `<instance>-<connection>` |
-
-The names are a state of the instance, reported by the engine (3.6).
 
 ### 3.4 Connection contracts
 
@@ -153,12 +143,8 @@ interface.
 
 ### 3.6 Instance status
 
-The instance status gains:
-
-| Instance | Field |
-|---|---|
-| Consumer | for each provisioned binding: server, database name, role name, connection name |
-| Server | sharing; each database it hosts, with its consumer, or `kept` with its origin and the date since when it has no consumer |
+The status of a consumer gains, for each provisioned binding: server, database name, role name,
+connection name.
 
 ## 4. Responsibilities
 
@@ -166,10 +152,7 @@ The instance status gains:
 |---|---|---|
 | Declared requirements | Package and its CI | Engine: checks them against the binding |
 | Provisioning, credentials, removal | Engine | Server: publishes `database-server-admin` |
-| Sharing | Engine | Control plane: offers only the servers a binding may use |
-| Choice of the server | Control plane (form) | Engine: rejects an invalid binding |
 | Platform server kept private | Engine | Control plane: never offers it to a project |
-| Adopting and deleting kept data | Control plane (confirmation, permission) | Engine (applies) |
 
 ## 5. Requirements
 
@@ -203,19 +186,6 @@ consumer declared at once on an empty project → both converge without interven
 failure → `failed` / `provisioning-failed`, naming the server and the database, and every other
 database of the server unchanged.*
 
-**D2.2 — Concurrent provisioning** (MUST, engine). Provisioned bindings declared at the same time
-on one server never interfere. *Test: five consumers declared at once on one server → five
-databases, five roles, five connections, every consumer converged.*
-
-**D2.3 — Same result on every path** (MUST, engine). A provisioned binding gives the same database,
-role and connection names whatever supported path declared it (P9.3). *Test: the same declaration
-through the console and through the command line, on two clusters → identical names.*
-
-**D2.4 — Drift** (MUST, engine). A provisioned database, role, Secret or connection changed or
-removed outside the contract is restored, or the consumer is `not-converged` / `drift` (P6.1).
-Restoring never drops data. *Test: role dropped by hand → restored with new credentials, or
-`drift`.*
-
 ### 5.3 Credentials and isolation
 
 **D3.1 — Own role** (MUST, engine). The role owns its database and holds no privilege to administer
@@ -229,102 +199,49 @@ cannot connect to any other database of the server. Per database engine:
 *Test: with the credentials of the connection, create a schema and a table → accepted; connect to
 another database of the server, or grant itself a forbidden privilege → refused.*
 
-**D3.2 — Exclusive connection** (MUST, engine). A provisioned connection is bound by its consumer
-only. *Test: another instance naming it → `failed` / `connection-in-use`, naming the consumer.*
+**D3.2 — Credentials** (MUST, engine). The Secret lives in the namespace of the consumer and holds
+`username`, `password` and `uri`. *Test: the three keys exist; `uri` connects.*
 
-**D3.3 — Credentials** (MUST, engine and package). The Secret lives in the namespace of the consumer
-and holds `username`, `password` and `uri`. Rotating the password updates the Secret in place; a
-package whose service reads it only at start declares how it restarts. *Test: `uri` connects;
-password rotated → the consumer connects again after its declared restart.*
-
-**D3.4 — Server credentials stay with the server** (MUST, engine). The Secret of `adminSecretRef`
+**D3.3 — Server credentials stay with the server** (MUST, engine). The Secret of `adminSecretRef`
 is never copied into a consumer namespace, a connection a package consumes, or a parameter.
 *Test: after provisioning, no object readable by the consumer holds the admin credentials.*
 
-**D3.5 — Platform server kept private** (MUST, engine and control plane). No `project` instance
+**D3.4 — Platform server kept private** (MUST, engine and control plane). No `project` instance
 binds a connection of the platform server or provisions on it. Its connections live in its own
 namespace only. *Test: project instance with `databases.db.server` naming the platform server, or
 naming one of its connections → rejected; the project form never lists them.*
 
-**D3.6 — Service Binding projection** (SHOULD, engine). Besides `username`, `password` and `uri`,
-the Secret holds the well-known entries `type` (the database engine), `host` and `port` of the
-Service Binding specification, and `database` (the database name), so that it can be projected
-into a workload as a binding. *Test: the Secret mounted as a Service Binding → a library
-implementing the specification reads the connection.*
+### 5.4 Servers
 
-### 5.4 Choosing the server
+**D4.1 — One package for every project server** (MUST, package). A project server, shared by the
+project or dedicated to one consumer, is an instance of the same package; nothing in its
+declaration says which. *Test: the same package version serves one consumer, then several.*
 
-**D4.1 — Explicit choice** (MUST, control plane). For each consumed `database-server` connection,
-the install form asks for one of: a database on a project server that meets the requirements and
-accepts the binding (D4.3); a database on a new dedicated server; an existing connection of the
-project. The form MAY preselect when only one answer is possible; it never decides silently.
-*Test: project with two servers → no choice made without the user.*
+**D4.2 — Light by default** (SHOULD, package). A project server runs one instance without backup by
+default. *Test: install without parameters → one instance, no backup.*
 
-**D4.2 — No project server yet** (MUST, control plane). When the project has no server, the form
-offers to create one, shared by the project or dedicated to the instance. The control plane
-declares the new server and the consumer together; D2.1 applies. *Test: empty project, each choice →
-a server and the consumer, both converged; after the dedicated choice, a second consumer is not
-offered that server.*
-
-**D4.3 — Sharing enforced** (MUST, engine). An `exclusive` server has at most one binding of any
-kind: one provisioned binding on it, or one existing binding to a connection whose `host` and `port`
-are those of the server. Setting `exclusive` on a server that already has more than one binding is
-rejected. Going from `exclusive` to `shared` is an explicit change of the server declaration.
-*Test: second consumer provisioning on an `exclusive` server, or binding an existing connection to
-its address → `failed` / `connection-in-use`, naming the server; `exclusive` set on a server with two
-consumers → rejected; set to `shared` → a second consumer binds.*
-
-**D4.4 — Shared and dedicated are one package** (MUST, package). A project server, shared or
-dedicated, is an instance of the same package; only `sharing` differs in its declaration. *Test: the
-same package version installed with each value → both serve their consumers.*
+**D4.3 — Health** (MUST, package). A server measures its health as a server (P7.4) and publishes
+`database-server-admin` only once it accepts connections. *Test: server not accepting connections →
+no `database-server-admin` connection, health not `healthy`.*
 
 ### 5.5 Lifecycle and data
 
 **D5.1 — Uninstall of a consumer** (MUST, engine). The role can no longer connect; the Secret and
-the connection are deleted; the database and its content are kept, and the server reports it as
-`kept`. A dedicated server is not removed with its consumer; the control plane offers it in the same
-confirmation. *Test: uninstall → no login possible, no Secret, no connection, the database and its
-tables still exist and show as `kept`.*
+the connection are deleted; the database and its content are kept. *Test: uninstall → no login
+possible, no Secret, no connection, the database and its tables still exist.*
 
-**D5.2 — Adopting a kept database** (MUST, engine and control plane). A provisioned binding whose
-database name matches a kept database adopts it only when the declaration sets `adopt: true` and the
-recorded origin has the same project and the same package name; the database gets new credentials
-and keeps its content. Otherwise the binding is `failed` with the reason `database-kept`, naming the
-kept database and its origin. The control plane sets `adopt` only after a confirmation that shows the
-origin. *Test: reinstall under the same name, `adopt: true` → the service finds its data; without
-`adopt` → `failed` / `database-kept`; another package under the same name with `adopt: true` → same,
-nothing adopted.*
-
-**D5.3 — Deleting data** (MUST, control plane and engine). Dropping a kept database is a separate
-action, under its own permission (P8.1), confirmed by naming the database, and recorded. Uninstalling
-a consumer never drops its database. *Test: drop without the permission → rejected; with it → the
-database is gone and the action is recorded.*
-
-**D5.4 — Removing a server** (MUST, control plane and engine). Uninstalling a server requires a
-confirmation listing its consumers and its kept databases (P5.8). Its volumes follow its `data`
-declaration. *Test: uninstall with a consumer → rejected without confirmation, the list is shown.*
-
-**D5.5 — Deleting a project** (MUST, control plane). The confirmation lists the databases deleted
-with the project. *Test: project with a server and kept databases → all listed.*
-
-### 5.6 Servers
-
-**D6.1 — Light by default** (SHOULD, package). A project server runs one instance without backup by
-default. Running more instances and backing up to the platform storage are parameters, settable at
-platform level. *Test: install without parameters → one instance, no backup.*
-
-**D6.2 — Health** (MUST, package). A server measures its health as a server (P7.4) and publishes
-`database-server-admin` only once it accepts connections. *Test: server not accepting connections →
-no `database-server-admin` connection, health not `healthy`.*
+**D5.2 — A kept database is never reused silently** (MUST, engine). A provisioned binding whose
+database name matches a kept database is `failed` with the reason `database-kept`, naming the
+database. *Test: uninstall, then reinstall under the same name on the same server → `failed` /
+`database-kept`, the kept database unchanged.*
 
 ## 6. Changes to the other documents
 
 | Document | Change |
 |---|---|
-| Packaging contract, instance declaration | `databases`, `sharing` (3.2) |
+| Packaging contract, instance declaration | `databases` (3.2) |
 | Packaging contract, instance status | 3.6 |
-| Packaging contract, P7.1 | Reasons of `failed`: `connection-requirements`, `provisioning-failed`, `connection-in-use`, `database-kept` |
-| Packaging contract, P8.1 | Separate permission to delete persistent data |
+| Packaging contract, P7.1 | Reasons of `failed`: `connection-requirements`, `provisioning-failed`, `database-kept` |
 | Descriptor | `connections.consumes[].database`, allowed only on `database-server` |
 | Registry | Interfaces of 3.5 |
 | Connection contracts | `database-server` and `database-server-admin` as in 3.4 |
@@ -334,6 +251,9 @@ no `database-server-admin` connection, health not `healthy`.*
 - Only `postgresql` is provisioned; `mariadb` is used through existing bindings. Provisioning a
   database engine adds its rows to the tables of 3.4 and D3.1, its keys to the sections of 3.1, and
   a server package.
+- Nothing prevents a second consumer from using a server meant to be dedicated.
+- A kept database is dropped, or given back to a consumer, by an administrator of the server,
+  outside this contract.
 - The platform services keep the databases listed by the administrator on the platform server.
 - Servers outside the cluster are used through existing bindings only.
 
@@ -341,7 +261,6 @@ no `database-server-admin` connection, health not `healthy`.*
 
 1. Should the platform services move to provisioned bindings on the platform server, ending the
    list written by the administrator?
-2. Rotation of credentials: on request only, or also periodic?
 
 ## 9. Informative annex: reference platforms
 
