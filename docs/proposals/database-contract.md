@@ -214,8 +214,7 @@ naming one of its connections → rejected; the project form never lists them.*
 ### 5.4 Servers
 
 **D4.1 — One package for every project server** (MUST, package). A project server, shared by the
-project or dedicated to one consumer, is an instance of the same package; nothing in its
-declaration says which. *Test: the same package version serves one consumer, then several.*
+project or dedicated to one consumer, is an instance of the same package. *Test: the same package version serves one consumer, then several.*
 
 **D4.2 — Light by default** (SHOULD, package). A project server runs one instance without backup by
 default. *Test: install without parameters → one instance, no backup.*
