@@ -127,6 +127,7 @@ by no package.
 | `engine` | database engine of the server |
 | `host`, `port` | address of the server |
 | `version` | version of the server, as numbered by the database engine |
+| `namespace` | namespace of the server workloads, holding the Secret of `adminSecretRef` (D3.3) |
 | `adminSecretRef` | Secret with keys `username`, `password`, of a role that can create databases, roles and what the section of the database engine lists |
 | `postgresql.extensions` | extensions the server can create |
 
