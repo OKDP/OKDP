@@ -105,7 +105,7 @@ databases:
 | `driver` | client driver class, for the consumers that need it |
 | `host`, `port` | address of the server |
 | `dbName` | name of the database |
-| `secretRef` | Secret with keys `username`, `password`, and `uri` when the database engine has a row in the table below |
+| `secretRef` | Secret with keys `username`, `password`, and `uri` when the platform writes the Secret (D3.2) and the database engine has a row in the table below |
 | `sslMode` | optional, `postgresql`: transport setting of a server reached over an untrusted network |
 | `tls` | optional, `mariadb`: same |
 | `version` | optional: version of the server, as numbered by the database engine (`18`, `11.4`) |
