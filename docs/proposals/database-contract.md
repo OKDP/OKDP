@@ -161,8 +161,8 @@ connection name.
 
 **D1.1 — Database through a connection** (MUST, package). A package that needs a database consumes
 one `database-server` connection per database. It never deploys a database server: only a package
-providing a server capability does. *Test: rendered package that provides no server capability and
-creates a database server → CI fails.*
+providing a server capability does. *Test: checked at review. `okdp-contract package check-render`
+checks a package rendered by `kubocd render`.*
 
 **D1.2 — The admin interface is the platform's** (MUST, package CI and engine). No package consumes
 `database-server-admin`. *Test: descriptor consuming `database-server-admin` → CI fails, the engine
