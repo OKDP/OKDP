@@ -19,14 +19,17 @@ A store needs no `provisioner`: its `connection` can be declared by hand, for ex
 | `buckets` | Buckets the identity can use |
 | `secretRef` | Secret holding `accessKey` and `secretKey` |
 | `pathStyle` | Optional. `true`: the bucket goes in the path of the URL, not in the host name |
+| `stsEndpoint` | Optional. URL where the identity gets temporary credentials. Unset: the store gives none |
+| `roleArn` | Optional. Role to assume for temporary credentials, for a store that needs one |
 
 ## 3. Claim
 
 | Requirement | Meaning | Met when |
 |---|---|---|
 | `buckets` | Buckets the `claimer` needs | Each one is in `buckets` |
+| `sts` | The `claimer` needs temporary credentials | `stsEndpoint` is set |
 
-- The requirement is optional.
+- Every requirement is optional.
 - A `claim` passes no other value to the `provisioner`.
 
 ## 4. Provisioner
@@ -36,12 +39,13 @@ A store needs no `provisioner`: its `connection` can be declared by hand, for ex
 - A bucket belongs to the namespace of the `claim` it was created for. A `claim` gets only buckets of its own namespace. For any other bucket, the `claim` is not bound and the reason names the bucket.
 - Two `claims` that name the same bucket share it. Each one still gets its own identity.
 - When the buckets of a `claim` change, the rights of its identity change with them. A bucket removed from the list is kept.
+- When the `provisioner` sets `stsEndpoint`, the identity gets temporary credentials there. They never have more rights than the identity.
 - The Secret is written in the namespace of the `claimer`.
 - The `connection` is defined once the buckets and the identity exist and the store accepts the identity.
 - A failure never changes or removes an existing bucket or its objects.
 
 ## 5. Removal
 
-- When a `claim` is removed, its identity no longer works and its Secret is removed. The buckets and their objects are kept.
+- When a `claim` is removed, its identity and the temporary credentials it got no longer work, and its Secret is removed. The buckets and their objects are kept.
 - A bucket with no `claim` left is kept on the store. It goes to a new `claim` of its namespace only if that `claim` names it.
 - If a `claim` names no bucket and the name chosen by the `provisioner` is a kept bucket, the `claim` is not bound and the reason names the bucket.
