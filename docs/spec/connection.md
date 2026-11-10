@@ -34,6 +34,7 @@ Services must be configured to honor connections between them, therefore the con
 - A `provisioner` handles the `claims` that name it. It creates the resource, defines a `connection` for the `claim`, and binds the `claim` to it.
 - A `provisioner` can serve only some `claimers`, for example those of one project. It binds no other `claim`.
 - A `provisioner` declares the `contracts` it handles and the `claimers` it serves, so that they can choose it.
+- A `provisioner` can also declare the properties that every `connection` it defines shares, credentials excepted, so that a `claimer` knows them before it binds.
 - A `provisioner` refuses a `claim` for a version of the `contract` it does not handle, or that holds a requirement it does not know. It never ignores a requirement.
 - The credentials a `provisioner` uses to create resources are never part of a `connection` it defines.
 
