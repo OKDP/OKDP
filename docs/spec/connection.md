@@ -19,7 +19,7 @@ Services must be configured to honor connections between them, therefore the con
 
 ## 3. Binding
 
-- A `connection` can exist without a `claim`. A `claimer` uses a `connection` only through a bound `claim`.
+- A `connection` can exist without a `claim`. A service can use a `connection` directly, or through a bound `claim`.
 - A `claim` names its target: a `provisioner` or an existing `connection`. A `claim` that names no target is not bound.
 - The same declarations always give the same binding. OKDP never searches for a target that matches the requirements of a `claim`.
 - The requirements of a `claim` are checked against the `connection`. If one is not met, the `claim` is not bound and the reason names the requirement.
